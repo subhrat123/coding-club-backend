@@ -1,4 +1,4 @@
-// 📁 server/index.js
+//index.js
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -25,19 +25,19 @@ mongoose
     process.exit(1);
   });
 
-// 🌩️ Cloudinary config
+//  Cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// 📦 Middleware
+//  Middleware
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload({ useTempFiles: true }));
 
-// 📁 Mongoose Schema
+//  Mongoose Schema
 const eventSchema = new mongoose.Schema({
   title: { type: String, required: true },
   date: { type: String, required: true },
@@ -46,7 +46,7 @@ const eventSchema = new mongoose.Schema({
 });
 const EventModel = mongoose.model("events_collections", eventSchema);
 
-// ☁️ Upload to Cloudinary
+// ☁ Upload to Cloudinary
 const uploadToCloudinary = async (filePath, publicId) => {
   const result = await cloudinary.uploader.upload(filePath, {
     public_id: publicId,
@@ -54,7 +54,7 @@ const uploadToCloudinary = async (filePath, publicId) => {
   return result;
 };
 
-// 📦 Routes
+//  Routes
 app.get("/api/events", async (req, res) => {
   try {
     const events = await EventModel.find().sort({ date: -1 });
@@ -138,7 +138,7 @@ app.delete("/api/events/:id", async (req, res) => {
   }
 });
 
-// 🔥 Start server
+//  Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
