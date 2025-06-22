@@ -1,4 +1,4 @@
-// 📁 server/index.js
+//  server/index.js
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -8,18 +8,18 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// 🔧 Load environment variables
+//  Load environment variables
 dotenv.config();
 
-// 🔧 Set up __dirname for ES Modules
+// Set up __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🛠️ App setup
+//  App setup
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 🔗 MongoDB Connection
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("🟢 MongoDB Connected"))
@@ -28,19 +28,19 @@ mongoose
     process.exit(1);
   });
 
-// ☁️ Cloudinary Configuration
+//  Cloudinary Configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// 🧩 Middleware
+//  Middleware
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload({ useTempFiles: true }));
 
-// 📦 Event Schema
+//  Event Schema
 const eventSchema = new mongoose.Schema({
   title: { type: String, required: true },
   date: { type: String, required: true },
@@ -49,7 +49,7 @@ const eventSchema = new mongoose.Schema({
 });
 const EventModel = mongoose.model("events_collections", eventSchema);
 
-// 📤 Cloudinary Upload Function
+// Cloudinary Upload Function
 const uploadToCloudinary = async (filePath, publicId) => {
   const result = await cloudinary.uploader.upload(filePath, {
     public_id: publicId,
@@ -58,9 +58,9 @@ const uploadToCloudinary = async (filePath, publicId) => {
   return result;
 };
 
-// ===================== 🌐 ROUTES =====================
+// ROUTES
 
-// ✅ GET all events
+// GET all events
 app.get("/api/events", async (req, res) => {
   try {
     const events = await EventModel.find().sort({ date: -1 });
@@ -71,7 +71,7 @@ app.get("/api/events", async (req, res) => {
   }
 });
 
-// ✅ POST new event
+// POST new event
 app.post("/api/events", async (req, res) => {
   try {
     const { title, date, description } = req.body;
@@ -103,7 +103,7 @@ app.post("/api/events", async (req, res) => {
   }
 });
 
-// ✅ PUT update event by ID
+//  PUT update event by ID
 app.put("/api/events/:id", async (req, res) => {
   try {
     const { title, date, description } = req.body;
@@ -136,23 +136,23 @@ app.put("/api/events/:id", async (req, res) => {
   }
 });
 
-// ✅ DELETE event by ID
+//  DELETE event by ID
 app.delete("/api/events/:id", async (req, res) => {
   try {
     const deleted = await EventModel.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ message: "❌ Event not found!" });
+      return res.status(404).json({ message: "Event not found!" });
     }
 
-    res.status(200).json({ message: "🗑️ Event deleted successfully!" });
+    res.status(200).json({ message: "Event deleted successfully!" });
   } catch (error) {
     console.error("❌ Delete Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// 🚀 Start Server
+//  Start Server
 app.listen(PORT, () => {
   console.log(`🌍 Server live at http://localhost:${PORT}`);
 });
