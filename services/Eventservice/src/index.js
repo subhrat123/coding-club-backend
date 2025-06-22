@@ -1,4 +1,4 @@
-//  server/index.js
+// 📁 server/index.js
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 //  Load environment variables
 dotenv.config();
 
-// Set up __dirname for ES Modules
+//  Set up __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -58,20 +58,20 @@ const uploadToCloudinary = async (filePath, publicId) => {
   return result;
 };
 
-// ROUTES
+//ROUTES
 
-// GET all events
+//  GET all events
 app.get("/api/events", async (req, res) => {
   try {
     const events = await EventModel.find().sort({ date: -1 });
     res.status(200).json(events);
   } catch (error) {
-    console.error("❌ Fetching Events Error:", error.message);
+    console.error(" Fetching Events Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// POST new event
+//  POST new event
 app.post("/api/events", async (req, res) => {
   try {
     const { title, date, description } = req.body;
@@ -96,9 +96,9 @@ app.post("/api/events", async (req, res) => {
     await newEvent.save();
     res
       .status(201)
-      .json({ message: "✅ Event created successfully!", event: newEvent });
+      .json({ message: " Event created successfully!", event: newEvent });
   } catch (error) {
-    console.error("❌ Event Creation Error:", error.message);
+    console.error(" Event Creation Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -124,30 +124,30 @@ app.put("/api/events/:id", async (req, res) => {
     );
 
     if (!updatedEvent) {
-      return res.status(404).json({ message: "❌ Event not found!" });
+      return res.status(404).json({ message: " Event not found!" });
     }
 
     res
       .status(200)
-      .json({ message: "✅ Event updated successfully!", event: updatedEvent });
+      .json({ message: " Event updated successfully!", event: updatedEvent });
   } catch (error) {
-    console.error("❌ Update Error:", error.message);
+    console.error(" Update Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-//  DELETE event by ID
+// DELETE event by ID
 app.delete("/api/events/:id", async (req, res) => {
   try {
     const deleted = await EventModel.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ message: "Event not found!" });
+      return res.status(404).json({ message: " Event not found!" });
     }
 
-    res.status(200).json({ message: "Event deleted successfully!" });
+    res.status(200).json({ message: " Event deleted successfully!" });
   } catch (error) {
-    console.error("❌ Delete Error:", error.message);
+    console.error(" Delete Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
